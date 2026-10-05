@@ -5,6 +5,11 @@ class Rightclick < Formula
   sha256 "5e34b08b18c20710867e3c22bda46020dc86f0e3cfaacf899945b1aa53467335"
   license "Apache-2.0"
 
+  bottle do
+    root_url "https://github.com/rossbuckley1990-hash/homebrew-tap/releases/download/rightclick-0.1.1"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe: "35f4b9b8a6f206d9673ac4391d85d3bf13b050ba884adb37c1322e4a5400ac7c"
+  end
+
   depends_on arch: :arm64
   depends_on macos: :sonoma
   uses_from_macos "swift" => :build, since: :sonoma
