@@ -1,0 +1,57 @@
+class Rightclick < Formula
+  desc "Install an app. Your AI learns what it can do"
+  homepage "https://github.com/rossbuckley1990-hash/rightclick"
+  url "https://github.com/rossbuckley1990-hash/rightclick/releases/download/v0.1.0/rightclick-0.1.0-source.tar.gz"
+  version "0.1.0"
+  sha256 "f45ba8bac307ed13110edb4914cf094eccd44e01dca484af957a94b34f3eca16"
+  license "Apache-2.0"
+
+  depends_on arch: :arm64
+  depends_on macos: :sonoma
+  uses_from_macos "swift" => :build, since: :sonoma
+
+  def select_free_command_line_tools
+    developer = Pathname("/Library/Developer/CommandLineTools")
+    return unless (developer/"usr/bin/swift").exist?
+
+    ENV["DEVELOPER_DIR"] = developer.to_s
+    ENV["SDKROOT"] = (developer/"SDKs/MacOSX.sdk").to_s
+    ENV.prepend_path "PATH", developer/"usr/bin"
+    ENV["CC"] = (developer/"usr/bin/clang").to_s
+    ENV["CXX"] = (developer/"usr/bin/clang++").to_s
+  end
+
+  def fetch
+    select_free_command_line_tools
+    compiler = Utils.safe_popen_read("swift", "--version")[/Swift version ([0-9.]+)/, 1]
+    if !compiler || Version.new(compiler) < Version.new("6.2")
+      odie "Source builds require Swift 6.2+ from the free Apple Command Line Tools."
+    end
+    # SwiftPM's manifest sandbox cannot nest inside Homebrew's build sandbox.
+    # Homebrew still confines the build; its fetch phase permits dependencies.
+    system "swift", "package", "--disable-sandbox", "--force-resolved-versions", "resolve"
+  end
+
+  def install
+    select_free_command_line_tools
+    ENV["ZERO_AR_DATE"] = "1"
+    system "swift", "build", "--product", "rightclick", *std_swift_args,
+           "--disable-sandbox", "--force-resolved-versions", "--skip-update",
+           "-Xswiftc", "-debug-prefix-map", "-Xswiftc", "#{buildpath}=/rightclick",
+           "-Xswiftc", "-file-prefix-map", "-Xswiftc", "#{buildpath}=/rightclick",
+           "-Xcc", "-fdebug-prefix-map=#{buildpath}=/rightclick",
+           "-Xcc", "-ffile-prefix-map=#{buildpath}=/rightclick",
+           "-Xlinker", "-oso_prefix", "-Xlinker", "#{buildpath}/"
+    bin.install ".build/release/rightclick"
+    (pkgshare/"ThirdPartyLicenses").install Dir["packaging/ThirdPartyLicenses/*"]
+  end
+
+  test do
+    assert_equal version.to_s, shell_output("#{bin}/rightclick version").strip
+    text = JSON.parse(shell_output("#{bin}/rightclick inspect 'RightClick' --json"))
+    assert_equal "text", text.fetch("kind")
+    assert_equal "RightClick", text.fetch("text")
+    assert_equal "public.plain-text", text.fetch("typeIdentifier")
+    assert_equal 10, text.fetch("byteCount")
+  end
+end
