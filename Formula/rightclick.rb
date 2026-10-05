@@ -5,6 +5,11 @@ class Rightclick < Formula
   sha256 "f45ba8bac307ed13110edb4914cf094eccd44e01dca484af957a94b34f3eca16"
   license "Apache-2.0"
 
+  livecheck do
+    url :stable
+    strategy :github_latest
+  end
+
   bottle do
     root_url "https://github.com/rossbuckley1990-hash/homebrew-tap/releases/download/rightclick-0.1.0"
     rebuild 1
@@ -51,20 +56,6 @@ class Rightclick < Formula
     (pkgshare/"ThirdPartyLicenses").install Dir["packaging/ThirdPartyLicenses/*"]
   end
 
-  test do
-    assert_equal version.to_s, shell_output("#{bin}/rightclick version").strip
-    text = JSON.parse(shell_output("#{bin}/rightclick inspect 'RightClick' --json"))
-    assert_equal "text", text.fetch("kind")
-    assert_equal "RightClick", text.fetch("text")
-    assert_equal "public.plain-text", text.fetch("typeIdentifier")
-    assert_equal 10, text.fetch("byteCount")
-  end
-
-  livecheck do
-    url :stable
-    strategy :github_latest
-  end
-
   def caveats
     <<~EOS
       Install an app. Your AI learns what it can do.
@@ -79,4 +70,12 @@ class Rightclick < Formula
     EOS
   end
 
+  test do
+    assert_equal version.to_s, shell_output("#{bin}/rightclick version").strip
+    text = JSON.parse(shell_output("#{bin}/rightclick inspect 'RightClick' --json"))
+    assert_equal "text", text.fetch("kind")
+    assert_equal "RightClick", text.fetch("text")
+    assert_equal "public.plain-text", text.fetch("typeIdentifier")
+    assert_equal 10, text.fetch("byteCount")
+  end
 end
