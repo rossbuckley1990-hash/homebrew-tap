@@ -2,7 +2,6 @@ class Rightclick < Formula
   desc "Install an app. Your AI learns what it can do"
   homepage "https://github.com/rossbuckley1990-hash/rightclick"
   url "https://github.com/rossbuckley1990-hash/rightclick/releases/download/v0.1.0/rightclick-0.1.0-source.tar.gz"
-  version "0.1.0"
   sha256 "f45ba8bac307ed13110edb4914cf094eccd44e01dca484af957a94b34f3eca16"
   license "Apache-2.0"
 
