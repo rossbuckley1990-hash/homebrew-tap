@@ -59,4 +59,24 @@ class Rightclick < Formula
     assert_equal "public.plain-text", text.fetch("typeIdentifier")
     assert_equal 10, text.fetch("byteCount")
   end
+
+  livecheck do
+    url :stable
+    strategy :github_latest
+  end
+
+  def caveats
+    <<~EOS
+      Install an app. Your AI learns what it can do.
+
+        rightclick setup
+
+      Enable RIGHTCLICK in Cursor MCP settings, start a new chat, and ask:
+      "What can my Mac do with this text: RightClick?"
+
+      Inspect before you confirm a run. Acceptance is not semantic success.
+      Proof and limits: https://github.com/rossbuckley1990-hash/rightclick
+    EOS
+  end
+
 end
