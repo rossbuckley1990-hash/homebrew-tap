@@ -75,7 +75,7 @@ jobs:
           root="$(python3 "$TAP_PATH/scripts/stage-bottle-release.py" root --formula "$TAP_PATH/Formula/rightclick.rb" \
             --bottle-dir "$BOTTLE_DIR" --head-sha "$HEAD_SHA" --pull-request "$PULL_REQUEST")"
           cd "$BOTTLE_DIR"
-          brew bottle --merge --write --no-commit --root-url="$root" *.bottle.json
+          brew bottle --merge --write --no-commit --root-url="$root" ./*.bottle.json
           brew audit --skip-style rossbuckley1990-hash/tap/rightclick
           test -z "$(git -C "$TAP_PATH" diff --cached --name-only)"
           test "$(git -C "$TAP_PATH" diff --name-only)" = Formula/rightclick.rb
