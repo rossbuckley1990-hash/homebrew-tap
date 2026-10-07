@@ -6,16 +6,22 @@ on:
       - Formula/rightclick.rb
       - README.md
       - scripts/check-distribution.py
+      - scripts/stage-bottle-release.py
       - tests/test_distribution.py
+      - tests/test_bottle_publication.py
       - .github/workflows/distribution-guard.yml
+      - .github/workflows/publish.yml
   push:
     branches: [main]
     paths:
       - Formula/rightclick.rb
       - README.md
       - scripts/check-distribution.py
+      - scripts/stage-bottle-release.py
       - tests/test_distribution.py
+      - tests/test_bottle_publication.py
       - .github/workflows/distribution-guard.yml
+      - .github/workflows/publish.yml
   release:
     types: [published]
   workflow_dispatch:
