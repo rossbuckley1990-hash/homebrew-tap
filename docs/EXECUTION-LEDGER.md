@@ -1,0 +1,19 @@
+# RCIR companion execution ledger — 2026-10-07
+
+Scope: a bounded seven-operation probe and its unchanged 17 fixture tests, reconciled from the supplied foundation pack. The probe starts the actual installed MCP process, checks runtime identity and performs read-only inspection. It is not a release, fresh install, RCIR action proof or restricted agent demonstration.
+
+- Initial base: `b91da8e2c3d1907f8542b46225481bc58f44f819`. Concurrent main changed to `6dda63a486f5bfbaf1c9ec2246992b6493668984`; the isolated candidate branch `feature/rcir-acceptance-20261007` was rebased to it. Formula blob `0f20d401c5e3ed085a863c57ca43e474767447bb`, including the bottle block, is preserved.
+- Open PR/merge reconciliation: [snapshot](../evidence/rcir-acceptance-20261007/pr-reconciliation.json). PR 6 documentation remains separate; PR 7 was closed without a GitHub merge record. We do not invent how the bottle reached main.
+- Tests: `python3 -m unittest discover -s tests -v`, exit 0, 34 tests (17 probe + 17 existing distribution), zero skips/failures. [Final log](../evidence/rcir-acceptance-20261007/probe-unit-final.log).
+- Installed probe: `python3 scripts/verify-seven-operations.py --binary /opt/homebrew/bin/rightclick --expected-version 0.2.2`, exit 0. [Actual result](../evidence/rcir-acceptance-20261007/installed-smoke.json). Installed SHA256 `d31419fafc96e08c4a2db9d1b389320acb2835c1a901597244249772d7ac489d`; exactly seven tools; zero provider actions. This existing install is not a fresh install and has no new RCIR code.
+- Environment: arm64 macOS 26.4.1, Python 3.11+ probe. Source/build/installed bytes are separate identities. Formula retains immutable v0.2.2 source SHA256 `a3953eb8f1be2f9123d694b90202244c94ee21971171972f8ce1d3bacf807ca5` and arm64 Tahoe bottle SHA256 `147828d2ad81b0238c4d733ad757c5c584b7fe359a58db34552052641ea762fd`.
+
+Engineering source/build/CI work uses the ordinary authorised workbench. Connected-agent repository read used the RIGHTCLICK skill and actual old installed runtime, after explicit confirmation; its evidence is in the companion rightclick repository. New production acceptance is likewise there and must not be inferred from this probe.
+
+Next: inspect this PR's exact-head checks, review and merge the additive probe when eligible. No formula version/checksum change is authorised by probe success alone. The runtime RCIR candidate must first pass its own production/release gates, then publish a new immutable asset through the reviewed workflow. Only then advance tap pins and demonstrate actual downloaded bottle/fresh install, upgrade with pairing preserved, client reconnection and verified public task acceptance. [Readiness](RELEASE-READINESS.md).
+
+## Schema boundary review
+
+Initial exact-head CI passed at `da39a314a7177397c193f3f5a3b85aa17328f815`: brew test-bot and the original 17 probe fixtures. Review found that tool names alone accepted a schema change. The added explicit fake-process control failed meaningfully against the old probe (`schema-probe-red.log`, exit 1); this is a probe unit RED, not a production dispatch claim. The probe now records a canonical full-declaration SHA256 and rejects drift between listings. Ordering alone does not cause a false failure; malformed Unicode fails closed. Original 17 tests are byte-for-byte unchanged.
+
+Final local tests: 38 PASS, zero skips (17 original probe, 4 additional schema controls, 17 distribution), `schema-probe-green-final.log`, exit 0. Actual old installed and new release-candidate processes pass, with distinct binary hashes and schema fingerprints in `installed-schema-smoke-final.json` and `candidate-release-schema-smoke-final.json`. A matching generic tool schema still does not establish RCIR implementation or task acceptance. Updated-head CI must pass before merge.
