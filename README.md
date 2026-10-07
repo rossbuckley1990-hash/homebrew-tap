@@ -95,6 +95,10 @@ Use these live sources instead of relying on duplicated “latest” version lab
 
 Homebrew is a distribution adapter for RIGHTCLICK, not a requirement of the capability runtime. The [upstream portable-runtime candidate](https://github.com/rossbuckley1990-hash/rightclick/pull/49) converges one engine and seven-operation MCP contract across macOS, Linux and Windows, with native discovery behind platform host boundaries. Its portability matrix and release gates remain candidate evidence until the implementation is reviewed, tested and merged.
 
+The next unpublished upstream runtime candidate is **0.2.3**, under review in PR49. This tap continues to install accepted **0.2.2** source and its matching bottle until the new candidate passes its release gates and independently verified immutable assets exist. A candidate version bump does not update installed bytes.
+
+RIGHTCLICK Stable and Edge connector packages have their own version numbers. Use the runtime’s `context_runtime` attestation to identify the serving executable; connector metadata does not establish a runtime release or capability acceptance.
+
 This tap still pins the published macOS release by content checksum. GitHub currently reports v0.2.2 as non-immutable; a checksum pin does not change that release setting. Its Apple Silicon/macOS restriction and bundled Darwin tunnel-client match the published bytes. Removing those restrictions before updating the accepted source release would produce a broken Linux installation.
 
 Before distributing a portable release, require upstream macOS, Linux and Windows integrated build/test and real-provider MCP acceptance on the exact release source. Publish and independently verify a new immutable source asset before moving this formula's URL/checksum. Preserve the reviewed bottle workflow and run the distribution guard against the installed package. Add Linux eligibility only when that pinned source and its formula build pass on Linux; platform-specific tunnel resources must be conditional. Windows uses the same upstream runtime source and separate installation packaging, without depending on this tap.
