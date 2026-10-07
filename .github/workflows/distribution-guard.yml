@@ -1,0 +1,48 @@
+name: RIGHTCLICK distribution guard
+
+on:
+  pull_request:
+    paths:
+      - Formula/rightclick.rb
+      - README.md
+      - scripts/check-distribution.py
+      - tests/test_distribution.py
+      - .github/workflows/distribution-guard.yml
+  push:
+    branches: [main]
+    paths:
+      - Formula/rightclick.rb
+      - README.md
+      - scripts/check-distribution.py
+      - tests/test_distribution.py
+      - .github/workflows/distribution-guard.yml
+  release:
+    types: [published]
+  workflow_dispatch:
+  schedule:
+    - cron: "23 */6 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: distribution-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  distribution-invariants:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Test alignment checks without network access
+        run: python3 -m unittest discover -s tests -v
+      - name: Verify published source bytes and upstream resource pins
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/check-distribution.py
+      - name: Require published matching binary bottles
+        if: contains(fromJSON('["release", "schedule", "workflow_dispatch"]'), github.event_name)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/check-distribution.py --require-bottle

@@ -1,16 +1,74 @@
 # RIGHTCLICK Homebrew tap
 
-## Install an app. Your AI learns what it can do.
+**The capability graph changes. The AI-facing interface does not.**
+
+RIGHTCLICK discovers supported capability contracts from local software and services, applies authority and safety checks, and invokes them through seven generic MCP operations. This tap distributes its published stable release; unreleased branches and untagged `main` changes are not shipped automatically.
+
+## Install and connect
 
 ```bash
 brew install rossbuckley1990-hash/tap/rightclick
+rightclick version
 rightclick setup
 ```
 
-Apple Silicon, macOS 14+. Source builds need Swift 6.2+ from free Apple Command Line Tools. Update Command Line Tools through Software Update if needed. A matching bottle is used automatically when available. No paid Apple Developer account is required.
+Apple Silicon, macOS 14+. Source builds require Swift 6.2+ from the free Apple Command Line Tools. Update Command Line Tools through Software Update when needed. No paid Apple Developer account is required.
 
-The formula pins the immutable v0.2.1 source asset by SHA256, resolves only the locked dependency revisions, and builds inside Homebrew's sandbox. Its test verifies version and exact text classification. It does not rely on a development checkout or existing build directory.
+For detected supported local clients, preview before applying:
 
-Bottles use the standard `brew tap-new` test-bot and reviewed `brew pr-pull` workflows, restricted to Apple Silicon macOS. Before publishing bottles, require a green formula pull request and its reviewed head SHA. Source installation remains supported when no bottle matches.
+```bash
+rightclick setup --all --dry-run --json
+rightclick setup --all --yes
+```
 
-`brew uninstall rightclick` removes the package. Cursor configuration and user logs/token remain; remove only RIGHTCLICK's entries/data if desired. See the [main repository](https://github.com/rossbuckley1990-hash/rightclick) for evidence, limits and security guidance.
+An individual client can be selected with `--client cursor`, `--client claude` (Claude Code), or `--client codex`. For any other compatible MCP client, launch `rightclick mcp` over stdio. See the [upstream client setup guide](https://github.com/rossbuckley1990-hash/rightclick#give-the-same-capability-runtime-to-your-ai).
+
+For the persistent ChatGPT bridge:
+
+```bash
+rightclick setup chatgpt --dry-run --json
+rightclick setup chatgpt --yes
+```
+
+The formula includes RIGHTCLICK's pinned tunnel-client compatibility resource and its required licence/notice files. Ordinary local MCP use does not require pairing the ChatGPT bridge.
+
+## Upgrade and check
+
+```bash
+brew update
+brew upgrade rightclick
+rightclick version
+rightclick doctor
+brew test rossbuckley1990-hash/tap/rightclick
+```
+
+For an existing ChatGPT bridge, also inspect `rightclick setup chatgpt --dry-run --json` and confirm the connected `context_runtime` reports the upgraded executable. A changed package or setup file alone does not prove a live connection. Do not delete pairing state merely to upgrade.
+
+## Source release versus binary bottle
+
+[Formula/rightclick.rb](Formula/rightclick.rb) is the installation pin. It names a versioned [upstream source release](https://github.com/rossbuckley1990-hash/rightclick/releases/latest) and its SHA256. Homebrew resolves the locked Swift dependency revisions and compiles that source inside its build sandbox when no matching bottle is configured.
+
+A **bottle** is a separate precompiled Homebrew package. It is used only when a matching `bottle do` block and platform checksum have been published in the formula. A source tarball, green unit tests, or an older tap release does not establish that a current binary bottle exists. Check the formula and [tap releases](https://github.com/rossbuckley1990-hash/homebrew-tap/releases) rather than a duplicated version claim in this README.
+
+## Maintainer alignment gates
+
+The source and resource pins come from upstream `packaging/tap/Formula/rightclick.rb` at the release tag. Preserve Homebrew style corrections and add bottle metadata only through the reviewed bottle workflow. Never force-move an upstream release tag or reuse old bottle checksums.
+
+```bash
+python3 -m unittest discover -s tests -v
+python3 scripts/check-distribution.py
+```
+
+The read-only check compares the latest stable upstream release, formula source pin and upstream generated resource pins, downloads and hashes the source asset, and verifies `SHA256SUMS-source`. It does not install software or modify either repository.
+
+Formula pull requests use the existing Apple Silicon `brew test-bot` build/test path. After its latest exact head and the distribution guard are green, use the existing **brew pr-pull** workflow with that pull request number and reviewed head SHA to publish its bottle and formula metadata. Do not merge a formula-only change and assume a bottle was published.
+
+Then require:
+
+```bash
+python3 scripts/check-distribution.py --require-bottle
+```
+
+This additionally checks the matching tap release, bottle root URL, Apple Silicon platform pins and downloaded bottle checksums. Scheduled, release and manual guard runs require this full check; a missing current bottle remains a visible failure, not a false green. Publication itself remains an explicit reviewed action.
+
+`brew uninstall rightclick` removes the package. Client registrations, pairing state and user logs are separate; remove only RIGHTCLICK-owned entries when intentionally disconnecting. See the [main repository](https://github.com/rossbuckley1990-hash/rightclick) for capability limits and security guidance. Provider acceptance is not independently verified success.
