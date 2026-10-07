@@ -1,0 +1,109 @@
+....E.EEEEEE......EE......
+======================================================================
+ERROR: test_independently_pinned_executable_matches (test_seven_operations.SevenOperationTests.test_independently_pinned_executable_matches)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 86, in test_independently_pinned_executable_matches
+    result = self.pinned_fixture("actual")
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 79, in pinned_fixture
+    return probe.verify(path, "0.2.2", timeout=3, expected_sha256=expected)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: verify() got an unexpected keyword argument 'expected_sha256'
+
+======================================================================
+ERROR: test_malformed_artifact_pin_blocks_before_launch (test_seven_operations.SevenOperationTests.test_malformed_artifact_pin_blocks_before_launch) (pin='')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 95, in test_malformed_artifact_pin_blocks_before_launch
+    with self.subTest(pin=pin): self.pinned_fixture(pin)
+                                ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 82, in pinned_fixture
+    probe.verify(path, "0.2.2", timeout=3, expected_sha256=expected)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: verify() got an unexpected keyword argument 'expected_sha256'
+
+======================================================================
+ERROR: test_malformed_artifact_pin_blocks_before_launch (test_seven_operations.SevenOperationTests.test_malformed_artifact_pin_blocks_before_launch) (pin='000000000000000000000000000000000000000000000000000000000000000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 95, in test_malformed_artifact_pin_blocks_before_launch
+    with self.subTest(pin=pin): self.pinned_fixture(pin)
+                                ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 82, in pinned_fixture
+    probe.verify(path, "0.2.2", timeout=3, expected_sha256=expected)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: verify() got an unexpected keyword argument 'expected_sha256'
+
+======================================================================
+ERROR: test_malformed_artifact_pin_blocks_before_launch (test_seven_operations.SevenOperationTests.test_malformed_artifact_pin_blocks_before_launch) (pin='00000000000000000000000000000000000000000000000000000000000000000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 95, in test_malformed_artifact_pin_blocks_before_launch
+    with self.subTest(pin=pin): self.pinned_fixture(pin)
+                                ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 82, in pinned_fixture
+    probe.verify(path, "0.2.2", timeout=3, expected_sha256=expected)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: verify() got an unexpected keyword argument 'expected_sha256'
+
+======================================================================
+ERROR: test_malformed_artifact_pin_blocks_before_launch (test_seven_operations.SevenOperationTests.test_malformed_artifact_pin_blocks_before_launch) (pin='gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 95, in test_malformed_artifact_pin_blocks_before_launch
+    with self.subTest(pin=pin): self.pinned_fixture(pin)
+                                ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 82, in pinned_fixture
+    probe.verify(path, "0.2.2", timeout=3, expected_sha256=expected)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: verify() got an unexpected keyword argument 'expected_sha256'
+
+======================================================================
+ERROR: test_malformed_artifact_pin_blocks_before_launch (test_seven_operations.SevenOperationTests.test_malformed_artifact_pin_blocks_before_launch) (pin='AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 95, in test_malformed_artifact_pin_blocks_before_launch
+    with self.subTest(pin=pin): self.pinned_fixture(pin)
+                                ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 82, in pinned_fixture
+    probe.verify(path, "0.2.2", timeout=3, expected_sha256=expected)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: verify() got an unexpected keyword argument 'expected_sha256'
+
+======================================================================
+ERROR: test_malformed_artifact_pin_blocks_before_launch (test_seven_operations.SevenOperationTests.test_malformed_artifact_pin_blocks_before_launch) (pin='0000000000000000000000000000000000000000000000000000000000000000\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 95, in test_malformed_artifact_pin_blocks_before_launch
+    with self.subTest(pin=pin): self.pinned_fixture(pin)
+                                ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 82, in pinned_fixture
+    probe.verify(path, "0.2.2", timeout=3, expected_sha256=expected)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: verify() got an unexpected keyword argument 'expected_sha256'
+
+======================================================================
+ERROR: test_unpinned_probe_discloses_only_local_consistency (test_seven_operations.SevenOperationTests.test_unpinned_probe_discloses_only_local_consistency)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 70, in test_unpinned_probe_discloses_only_local_consistency
+    self.assertEqual(self.run_probe("pass")["artifactIdentity"], "LOCAL_CONSISTENCY_ONLY")
+                     ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+KeyError: 'artifactIdentity'
+
+======================================================================
+ERROR: test_wrong_artifact_pin_blocks_before_launch (test_seven_operations.SevenOperationTests.test_wrong_artifact_pin_blocks_before_launch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 91, in test_wrong_artifact_pin_blocks_before_launch
+    self.pinned_fixture("0" * 64)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap-rcir-next/tests/test_seven_operations.py", line 82, in pinned_fixture
+    probe.verify(path, "0.2.2", timeout=3, expected_sha256=expected)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: verify() got an unexpected keyword argument 'expected_sha256'
+
+----------------------------------------------------------------------
+Ran 21 tests in 4.634s
+
+FAILED (errors=9)

@@ -81,15 +81,20 @@ def _tools(result: dict[str, Any]) -> list[str]:
     return sorted(names)
 
 
-def verify(binary: Path, expected_version: str, timeout: float = 30.0) -> dict[str, Any]:
+def verify(binary: Path, expected_version: str, timeout: float = 30.0, *,
+           expected_sha256: str | None = None) -> dict[str, Any]:
     if not math.isfinite(timeout) or not 0 < timeout <= 120:
         raise AcceptanceError("Timeout must be positive and at most 120 seconds")
     if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?", expected_version):
         raise AcceptanceError("An explicit semantic expected version is required")
+    if expected_sha256 is not None and not re.fullmatch(r"[0-9a-f]{64}", expected_sha256):
+        raise AcceptanceError("Expected executable SHA-256 must be exactly 64 lowercase hexadecimal characters")
     executable = binary.expanduser().resolve(strict=True)
     if not executable.is_file() or not os.access(executable, os.X_OK):
         raise AcceptanceError("Selected binary is not executable")
     before_hash = _digest(executable)
+    if expected_sha256 is not None and before_hash != expected_sha256:
+        raise AcceptanceError("Selected executable does not match the independently supplied SHA-256")
     frames: queue.Queue[bytes | Exception] = queue.Queue(maxsize=32)
     stopping = threading.Event()
     end = time.monotonic() + timeout
@@ -181,6 +186,7 @@ def verify(binary: Path, expected_version: str, timeout: float = 30.0) -> dict[s
             raise AcceptanceError("Executable changed during acceptance")
         return {"status": "PASS", "scope": "installed stdio process; runtime identity and read-only inspection",
                 "version": expected_version, "binarySHA256": before_hash, "toolCount": 7,
+                "artifactIdentity": "PINNED_SHA256_MATCH" if expected_sha256 is not None else "LOCAL_CONSISTENCY_ONLY",
                 "operations": names, "providerActionsInvoked": 0,
                 "elevenSubstrateProof": "NOT_RUN", "modernDiscoveryProtocol": "NOT_TESTED"}
     finally:
@@ -200,10 +206,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--binary", required=True, type=Path)
     parser.add_argument("--expected-version", required=True)
+    parser.add_argument("--expected-sha256", help="Independently trusted SHA-256 of the executable, not the source archive or bottle")
     parser.add_argument("--timeout", type=float, default=30)
     options = parser.parse_args()
     try:
-        print(json.dumps(verify(options.binary, options.expected_version, options.timeout), indent=2, sort_keys=True))
+        print(json.dumps(verify(options.binary, options.expected_version, options.timeout,
+                               expected_sha256=options.expected_sha256), indent=2, sort_keys=True))
         return 0
     except (AcceptanceError, OSError, subprocess.SubprocessError) as exc:
         # Never echo arbitrary server output, environment, credentials, or payloads.
