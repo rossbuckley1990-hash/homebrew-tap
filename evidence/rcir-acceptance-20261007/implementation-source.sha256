@@ -1,0 +1,3 @@
+349cfd81545595ff30ebcbd3d53bf3236faef2ee502d2183fa1fb7ff75d7f603  .github/workflows/seven-operation-probe.yml
+fda422aec3ba3f32957e48d917e2e533b50a1047cdc035d7c7183bcb4fcd2601  scripts/verify-seven-operations.py
+0dc243a5beea403136f3e7898ab33d4c199953946be4f71909d6a5c13834d6e5  tests/test_seven_operations.py

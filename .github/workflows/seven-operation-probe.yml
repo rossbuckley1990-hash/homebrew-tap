@@ -1,0 +1,27 @@
+name: Seven-operation probe tests (fixtures only)
+on:
+  pull_request:
+    paths:
+      - 'scripts/verify-seven-operations.py'
+      - 'tests/test_seven_operations.py'
+      - '.github/workflows/seven-operation-probe.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/verify-seven-operations.py'
+      - 'tests/test_seven_operations.py'
+      - '.github/workflows/seven-operation-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: seven-operation-probe-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    container: python:3.13-slim
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - run: python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v

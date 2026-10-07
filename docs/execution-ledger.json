@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "snapshotDate": "2026-10-07",
+  "baseCommit": "6dda63a486f5bfbaf1c9ec2246992b6493668984",
+  "candidateManifestSHA256": "37b6ec92e7868147128275c182f575cc473843f99ec7af8a7a16f10b759737a4",
+  "states": {
+    "implementation": "PASS",
+    "local_tests": "PASS",
+    "native_tests": "NOT_RUN",
+    "live_runtime": "NOT_RUN",
+    "restricted_agent": "NOT_RUN",
+    "review": "IN_PROGRESS",
+    "merge": "NOT_RUN",
+    "artifact_build": "NOT_RUN",
+    "artifact_publish": "NOT_RUN",
+    "fresh_install": "NOT_RUN",
+    "client_acceptance": "NOT_RUN"
+  },
+  "pythonVersion": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "runs": [
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "exitCode": 0,
+      "tests": 34,
+      "skips": 0,
+      "evidence": "evidence/rcir-acceptance-20261007/probe-unit-final.log"
+    },
+    {
+      "command": "python3 scripts/verify-seven-operations.py --binary /opt/homebrew/bin/rightclick --expected-version 0.2.2",
+      "exitCode": 0,
+      "evidence": "evidence/rcir-acceptance-20261007/installed-smoke.json",
+      "boundary": "Old existing install, NOT fresh install or candidate RCIR dispatch"
+    }
+  ],
+  "formulaBlob": "0f20d401c5e3ed085a863c57ca43e474767447bb",
+  "formulaChangedByCandidate": false,
+  "remoteCI": "NOT_RUN",
+  "release": "Candidate publication/fresh install/reconnection NOT_RUN",
+  "nextAction": "Inspect exact-head PR checks, review additive probe; retain pins until accepted immutable replacement publication."
+}
