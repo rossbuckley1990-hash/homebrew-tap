@@ -5,16 +5,16 @@ class Rightclick < Formula
   sha256 "6a8bfd4617bb5f63a5972015e654c09b2f1dc7aca5808258c0af2fc0f9483601"
   license "Apache-2.0"
 
+  depends_on arch: :arm64
+  depends_on macos: :sonoma
+  uses_from_macos "swift" => :build, since: :sonoma
+
   # RIGHTCLICK owns this compatibility pin.
   # ChatGPT's modern tunnel path requires OpenAI tunnel-client >= 0.0.15.
   resource "openai-tunnel-client" do
     url "https://github.com/openai/tunnel-client/releases/download/v0.0.15/tunnel-client-v0.0.15-darwin-arm64.zip"
     sha256 "b2cae3aa9df45b4c2fe9b1d700ebacce39f9feb6a6b46b86e6499f9a51bf72ff"
   end
-
-  depends_on arch: :arm64
-  depends_on macos: :sonoma
-  uses_from_macos "swift" => :build, since: :sonoma
 
   def select_free_command_line_tools
     developer = Pathname("/Library/Developer/CommandLineTools")
@@ -55,7 +55,7 @@ class Rightclick < Formula
       libexec.install(
         "tunnel-client",
         "cloudflared",
-        "cloudflared-manifest.json"
+        "cloudflared-manifest.json",
       )
 
       tunnel_share = pkgshare/"OpenAITunnelClient"
@@ -64,7 +64,7 @@ class Rightclick < Formula
         "LICENSE",
         "NOTICE",
         "tunnel-client-v0.0.15-darwin-arm64-licenses.txt",
-        "tunnel-client-v0.0.15-darwin-arm64.spdx.json"
+        "tunnel-client-v0.0.15-darwin-arm64.spdx.json",
       )
     end
   end
@@ -81,7 +81,7 @@ class Rightclick < Formula
 
     assert_match(
       "0.0.15",
-      shell_output("#{libexec}/tunnel-client --version")
+      shell_output("#{libexec}/tunnel-client --version"),
     )
   end
 end
