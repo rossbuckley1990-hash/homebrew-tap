@@ -5,6 +5,12 @@ class Rightclick < Formula
   sha256 "a3953eb8f1be2f9123d694b90202244c94ee21971171972f8ce1d3bacf807ca5"
   license "Apache-2.0"
 
+  bottle do
+    root_url "https://github.com/rossbuckley1990-hash/homebrew-tap/releases/download/rightclick-0.2.2"
+    rebuild 1
+    sha256 arm64_tahoe: "147828d2ad81b0238c4d733ad757c5c584b7fe359a58db34552052641ea762fd"
+  end
+
   # Publish this release through the reviewed-head bottle workflow before merging.
 
   depends_on arch: :arm64
