@@ -14,9 +14,11 @@ Use the candidate's actual immutable formula version when validating a later rel
 
 The probe requires exactly the seven RIGHTCLICK operations, twice, with canonical full-declaration schema fingerprints; rejects extra/duplicate/missing tools and unexpected pagination; compares the reported process ID, resolved binary path, executable SHA-256 and version with the launched process; and performs a literal, read-only context inspection. JSON responses, frame count/size and runtime are bounded. Duplicate JSON keys, malformed IDs and errors fail closed. Child cleanup is bounded. Arbitrary server output or credentials are not printed on failure.
 
-It tests the legacy initialize/stdio compatibility path, not modern self-contained discovery. A matching hash is a consistency check, not independent proof that a malicious executable is trustworthy. It does not test actual task execution, provider credentials, RCIR integration, all eleven substrates or a fresh install.
+It tests the legacy initialize/stdio compatibility path, not modern self-contained discovery. Without an independently supplied hash it reports `artifactIdentity: LOCAL_CONSISTENCY_ONLY`. It does not test actual task execution, provider credentials, RCIR integration, all eleven substrates or a fresh install.
 
-The original 17 unit tests (unchanged) plus four schema controls use explicitly named fake MCP processes. They validate the probe and its rejection paths, not the installed Mac product. Run them with:
+For release acceptance, pass `--expected-sha256` with the executable's SHA-256 from a separately trusted manifest or accepted build record. It refers to executable bytes, not source-archive or bottle bytes. Validation and comparison happen before launching the selected binary. A matching pin reports `PINNED_SHA256_MATCH`; an untrusted manifest still cannot establish publisher trust. Do not derive the expected pin from the same binary during acceptance and call that independent provenance.
+
+The original 17 probe controls plus four schema and four pin controls use explicitly named fake MCP processes. They validate the probe and its rejection paths, not the installed Mac product. The pin additions cover matching trusted bytes, mismatch/malformed rejection before launch, and explicit unpinned reporting. Run all 25 probe controls with:
 
 ```bash
 python3 -m unittest discover -s tests -p 'test_seven_operations*.py' -v
