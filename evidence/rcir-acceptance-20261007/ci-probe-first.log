@@ -1,0 +1,150 @@
+unit	Set up job	﻿2026-10-07T11:47:45.4251342Z Current runner version: '2.337.0'
+unit	Set up job	2026-10-07T11:47:45.4280018Z ##[group]Runner Image Provisioner
+unit	Set up job	2026-10-07T11:47:45.4281000Z Hosted Compute Agent
+unit	Set up job	2026-10-07T11:47:45.4281622Z Version: 20260901.588
+unit	Set up job	2026-10-07T11:47:45.4282409Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+unit	Set up job	2026-10-07T11:47:45.4283455Z Build Date: 2026-09-01T19:56:44Z
+unit	Set up job	2026-10-07T11:47:45.4284344Z Worker ID: {b61d2b58-f426-4474-82ea-b19006c1be52}
+unit	Set up job	2026-10-07T11:47:45.4285108Z Azure Region: eastus
+unit	Set up job	2026-10-07T11:47:45.4285707Z ##[endgroup]
+unit	Set up job	2026-10-07T11:47:45.4287594Z ##[group]Operating System
+unit	Set up job	2026-10-07T11:47:45.4288702Z Ubuntu
+unit	Set up job	2026-10-07T11:47:45.4289629Z 24.04.5
+unit	Set up job	2026-10-07T11:47:45.4290422Z LTS
+unit	Set up job	2026-10-07T11:47:45.4291182Z ##[endgroup]
+unit	Set up job	2026-10-07T11:47:45.4292113Z ##[group]Runner Image
+unit	Set up job	2026-10-07T11:47:45.4293164Z Image: ubuntu-24.04
+unit	Set up job	2026-10-07T11:47:45.4293844Z Version: 20260927.320.1
+unit	Set up job	2026-10-07T11:47:45.4295046Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+unit	Set up job	2026-10-07T11:47:45.4296936Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+unit	Set up job	2026-10-07T11:47:45.4297999Z ##[endgroup]
+unit	Set up job	2026-10-07T11:47:45.4299213Z ##[group]GITHUB_TOKEN Permissions
+unit	Set up job	2026-10-07T11:47:45.4301416Z Contents: read
+unit	Set up job	2026-10-07T11:47:45.4302177Z Metadata: read
+unit	Set up job	2026-10-07T11:47:45.4303184Z ##[endgroup]
+unit	Set up job	2026-10-07T11:47:45.4305677Z Secret source: Actions
+unit	Set up job	2026-10-07T11:47:45.4306684Z Cache mode: write
+unit	Set up job	2026-10-07T11:47:45.4307497Z Prepare workflow directory
+unit	Set up job	2026-10-07T11:47:45.4735702Z Prepare all required actions
+unit	Set up job	2026-10-07T11:47:45.4787332Z Getting action download info
+unit	Set up job	2026-10-07T11:47:45.6991914Z Download action repository 'actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd' (SHA:de0fac2e4500dabe0009e67214ff5f5447ce83dd)
+unit	Set up job	2026-10-07T11:47:45.9279537Z Complete job name: unit
+unit	Initialize containers	﻿2026-10-07T11:47:45.9826850Z ##[group]Checking docker version
+unit	Initialize containers	2026-10-07T11:47:45.9840480Z ##[command]/usr/bin/docker version --format '{{.Server.APIVersion}}'
+unit	Initialize containers	2026-10-07T11:47:46.0913532Z '1.48'
+unit	Initialize containers	2026-10-07T11:47:46.0929725Z Docker daemon API version: '1.48'
+unit	Initialize containers	2026-10-07T11:47:46.0930660Z ##[command]/usr/bin/docker version --format '{{.Client.APIVersion}}'
+unit	Initialize containers	2026-10-07T11:47:46.1108214Z '1.48'
+unit	Initialize containers	2026-10-07T11:47:46.1123934Z Docker client API version: '1.48'
+unit	Initialize containers	2026-10-07T11:47:46.1131284Z ##[endgroup]
+unit	Initialize containers	2026-10-07T11:47:46.1135224Z ##[group]Clean up resources from previous jobs
+unit	Initialize containers	2026-10-07T11:47:46.1141057Z ##[command]/usr/bin/docker ps --all --quiet --no-trunc --filter "label=ee1f76"
+unit	Initialize containers	2026-10-07T11:47:46.1310544Z ##[command]/usr/bin/docker network prune --force --filter "label=ee1f76"
+unit	Initialize containers	2026-10-07T11:47:46.1456518Z ##[endgroup]
+unit	Initialize containers	2026-10-07T11:47:46.1457112Z ##[group]Create local container network
+unit	Initialize containers	2026-10-07T11:47:46.1468274Z ##[command]/usr/bin/docker network create --label ee1f76 github_network_3743d75cf0424ab0a6b4c469a6e54a8e
+unit	Initialize containers	2026-10-07T11:47:46.1993881Z 140b134a8075d3627632d8c455039576156da3dc51020601cd41ab5f1fec974b
+unit	Initialize containers	2026-10-07T11:47:46.2013319Z ##[endgroup]
+unit	Initialize containers	2026-10-07T11:47:46.2038635Z ##[group]Starting job container
+unit	Initialize containers	2026-10-07T11:47:46.2062635Z ##[command]/usr/bin/docker pull python:3.13-slim
+unit	Initialize containers	2026-10-07T11:47:46.4531579Z 3.13-slim: Pulling from library/python
+unit	Initialize containers	2026-10-07T11:47:46.5278706Z ecc510c1e359: Pulling fs layer
+unit	Initialize containers	2026-10-07T11:47:46.5280770Z 65a67aec859c: Pulling fs layer
+unit	Initialize containers	2026-10-07T11:47:46.5282283Z 3a5db7051419: Pulling fs layer
+unit	Initialize containers	2026-10-07T11:47:46.5283928Z 2f5b06adfd91: Pulling fs layer
+unit	Initialize containers	2026-10-07T11:47:46.5285434Z 2f5b06adfd91: Waiting
+unit	Initialize containers	2026-10-07T11:47:46.5725278Z 65a67aec859c: Verifying Checksum
+unit	Initialize containers	2026-10-07T11:47:46.5727150Z 65a67aec859c: Download complete
+unit	Initialize containers	2026-10-07T11:47:46.6035572Z 2f5b06adfd91: Verifying Checksum
+unit	Initialize containers	2026-10-07T11:47:46.6038450Z 2f5b06adfd91: Download complete
+unit	Initialize containers	2026-10-07T11:47:46.6083104Z 3a5db7051419: Download complete
+unit	Initialize containers	2026-10-07T11:47:46.6561388Z ecc510c1e359: Verifying Checksum
+unit	Initialize containers	2026-10-07T11:47:46.6563025Z ecc510c1e359: Download complete
+unit	Initialize containers	2026-10-07T11:47:47.6856252Z ecc510c1e359: Pull complete
+unit	Initialize containers	2026-10-07T11:47:47.8821701Z 65a67aec859c: Pull complete
+unit	Initialize containers	2026-10-07T11:47:48.5009727Z 3a5db7051419: Pull complete
+unit	Initialize containers	2026-10-07T11:47:48.5130779Z 2f5b06adfd91: Pull complete
+unit	Initialize containers	2026-10-07T11:47:48.5174392Z Digest: sha256:bf44cdfcb76cd3b41e879bc058fc37ec5872002ccfde7fcb765e218cde0cd79c
+unit	Initialize containers	2026-10-07T11:47:48.5190175Z Status: Downloaded newer image for python:3.13-slim
+unit	Initialize containers	2026-10-07T11:47:48.5199535Z docker.io/library/python:3.13-slim
+unit	Initialize containers	2026-10-07T11:47:48.5293667Z ##[command]/usr/bin/docker create --name d264ad04d3164f4eb638d66308aa5c96_python313slim_9b9213 --label ee1f76 --workdir /__w/homebrew-tap/homebrew-tap --network github_network_3743d75cf0424ab0a6b4c469a6e54a8e  -e "HOME=/github/home" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work":"/__w" -v "/home/runner/actions-runner/cached/2.337.0/externals":"/__e":ro -v "/home/runner/work/_temp":"/__w/_temp" -v "/home/runner/work/_actions":"/__w/_actions" -v "/opt/hostedtoolcache":"/__t" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" --entrypoint "tail" python:3.13-slim "-f" "/dev/null"
+unit	Initialize containers	2026-10-07T11:47:48.5568425Z b07140d3434d82d4169fc0b33bc844ea3d87887a689972a58283f6d1863f158f
+unit	Initialize containers	2026-10-07T11:47:48.5594011Z ##[command]/usr/bin/docker start b07140d3434d82d4169fc0b33bc844ea3d87887a689972a58283f6d1863f158f
+unit	Initialize containers	2026-10-07T11:47:48.7728343Z b07140d3434d82d4169fc0b33bc844ea3d87887a689972a58283f6d1863f158f
+unit	Initialize containers	2026-10-07T11:47:48.7749660Z ##[command]/usr/bin/docker ps --all --filter id=b07140d3434d82d4169fc0b33bc844ea3d87887a689972a58283f6d1863f158f --filter status=running --no-trunc --format "{{.ID}} {{.Status}}"
+unit	Initialize containers	2026-10-07T11:47:48.7876297Z b07140d3434d82d4169fc0b33bc844ea3d87887a689972a58283f6d1863f158f Up Less than a second
+unit	Initialize containers	2026-10-07T11:47:48.7896266Z ##[command]/usr/bin/docker inspect --format "{{range .Config.Env}}{{println .}}{{end}}" b07140d3434d82d4169fc0b33bc844ea3d87887a689972a58283f6d1863f158f
+unit	Initialize containers	2026-10-07T11:47:48.8027131Z HOME=/github/home
+unit	Initialize containers	2026-10-07T11:47:48.8027677Z GITHUB_ACTIONS=true
+unit	Initialize containers	2026-10-07T11:47:48.8027969Z CI=true
+unit	Initialize containers	2026-10-07T11:47:48.8028521Z PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+unit	Initialize containers	2026-10-07T11:47:48.8029042Z GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305
+unit	Initialize containers	2026-10-07T11:47:48.8029393Z PYTHON_VERSION=3.13.16
+unit	Initialize containers	2026-10-07T11:47:48.8029955Z PYTHON_SHA256=f4b1bfb3c79b5bb11b8d228a12504163b4c0dab4d679828d8f5f26b6cb6ab35d
+unit	Initialize containers	2026-10-07T11:47:48.8050924Z ##[endgroup]
+unit	Initialize containers	2026-10-07T11:47:48.8060767Z ##[group]Waiting for all services to be ready
+unit	Initialize containers	2026-10-07T11:47:48.8062579Z ##[endgroup]
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	﻿2026-10-07T11:47:48.8389826Z ##[group]Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8390610Z with:
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8390882Z   repository: rossbuckley1990-hash/homebrew-tap
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8393652Z   token: ***
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8393882Z   ssh-strict: true
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8394096Z   ssh-user: git
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8394310Z   persist-credentials: true
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8394549Z   clean: true
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8394784Z   sparse-checkout-cone-mode: true
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8395076Z   fetch-depth: 1
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8395276Z   fetch-tags: false
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8395484Z   show-progress: true
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8395693Z   lfs: false
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8395884Z   submodules: false
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8396096Z   set-safe-directory: true
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8396686Z ##[endgroup]
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:48.8461618Z ##[command]/usr/bin/docker exec  b07140d3434d82d4169fc0b33bc844ea3d87887a689972a58283f6d1863f158f sh -c "cat /etc/*release | grep ^ID"
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.0481878Z Syncing repository: rossbuckley1990-hash/homebrew-tap
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.0484490Z ##[group]Getting Git version info
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.0485136Z Working directory is '/__w/homebrew-tap/homebrew-tap'
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.0486059Z ##[endgroup]
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.0486507Z Deleting the contents of '/__w/homebrew-tap/homebrew-tap'
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.0487185Z The repository will be downloaded using the GitHub REST API
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.0487949Z To create a local Git repository instead, add Git 2.18 or higher to the PATH
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.0489112Z Downloading the archive
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.4183939Z Writing archive to disk
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.4196597Z Extracting the archive
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.4314895Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /__w/homebrew-tap/homebrew-tap/70484299-450d-49f3-b4e2-fb12d5753a60 -f /__w/homebrew-tap/homebrew-tap/70484299-450d-49f3-b4e2-fb12d5753a60.tar.gz
+unit	Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:49.4389928Z Resolved version rossbuckley1990-hash-homebrew-tap-f50cba0
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	﻿2026-10-07T11:47:49.4760469Z ##[group]Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:49.4761248Z ^[[36;1mpython3 -m unittest discover -s tests -p 'test_seven_operations.py' -v^[[0m
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:49.4765422Z shell: sh -e {0}
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:49.4765679Z ##[endgroup]
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:49.9362453Z test_duplicate_json (test_seven_operations.SevenOperationTests.test_duplicate_json) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:49.9672445Z test_duplicate_tool (test_seven_operations.SevenOperationTests.test_duplicate_tool) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:49.9991133Z test_explicit_fixture_passes_and_invokes_no_provider_action (test_seven_operations.SevenOperationTests.test_explicit_fixture_passes_and_invokes_no_provider_action) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:50.0297376Z test_extra_tool (test_seven_operations.SevenOperationTests.test_extra_tool) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:50.0299332Z test_invalid_timeout (test_seven_operations.SevenOperationTests.test_invalid_timeout) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:50.0607968Z test_missing_tool (test_seven_operations.SevenOperationTests.test_missing_tool) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:50.0949906Z test_notification_flood (test_seven_operations.SevenOperationTests.test_notification_flood) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.0297283Z test_oversized_frame (test_seven_operations.SevenOperationTests.test_oversized_frame) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.0617501Z test_pagination (test_seven_operations.SevenOperationTests.test_pagination) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.2639851Z test_timeout (test_seven_operations.SevenOperationTests.test_timeout) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.2945810Z test_tool_error (test_seven_operations.SevenOperationTests.test_tool_error) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.3255207Z test_wrong_hash (test_seven_operations.SevenOperationTests.test_wrong_hash) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.3546917Z test_wrong_id (test_seven_operations.SevenOperationTests.test_wrong_id) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.3861770Z test_wrong_inspection (test_seven_operations.SevenOperationTests.test_wrong_inspection) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.4168142Z test_wrong_path (test_seven_operations.SevenOperationTests.test_wrong_path) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.4474254Z test_wrong_pid (test_seven_operations.SevenOperationTests.test_wrong_pid) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.4778449Z test_wrong_version (test_seven_operations.SevenOperationTests.test_wrong_version) ... ok
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.4779310Z 
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.4779569Z ----------------------------------------------------------------------
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.4780163Z Ran 17 tests in 1.574s
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.4780437Z 
+unit	Run python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v	2026-10-07T11:47:51.4780618Z OK
+unit	Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	﻿2026-10-07T11:47:51.5074263Z Post job cleanup.
+unit	Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd	2026-10-07T11:47:51.5082245Z ##[command]/usr/bin/docker exec  b07140d3434d82d4169fc0b33bc844ea3d87887a689972a58283f6d1863f158f sh -c "cat /etc/*release | grep ^ID"
+unit	Stop containers	﻿2026-10-07T11:47:51.7073735Z Stop and remove container: d264ad04d3164f4eb638d66308aa5c96_python313slim_9b9213
+unit	Stop containers	2026-10-07T11:47:51.7079648Z ##[command]/usr/bin/docker rm --force b07140d3434d82d4169fc0b33bc844ea3d87887a689972a58283f6d1863f158f
+unit	Stop containers	2026-10-07T11:47:51.8259936Z b07140d3434d82d4169fc0b33bc844ea3d87887a689972a58283f6d1863f158f
+unit	Stop containers	2026-10-07T11:47:51.8289530Z Remove container network: github_network_3743d75cf0424ab0a6b4c469a6e54a8e
+unit	Stop containers	2026-10-07T11:47:51.8295241Z ##[command]/usr/bin/docker network rm github_network_3743d75cf0424ab0a6b4c469a6e54a8e
+unit	Stop containers	2026-10-07T11:47:51.9291913Z github_network_3743d75cf0424ab0a6b4c469a6e54a8e
+unit	Complete job	﻿2026-10-07T11:47:51.9367285Z Cleaning up orphan processes

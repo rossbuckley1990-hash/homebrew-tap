@@ -4,12 +4,14 @@ on:
     paths:
       - 'scripts/verify-seven-operations.py'
       - 'tests/test_seven_operations.py'
+      - 'tests/test_seven_operations_schema.py'
       - '.github/workflows/seven-operation-probe.yml'
   push:
     branches: [main]
     paths:
       - 'scripts/verify-seven-operations.py'
       - 'tests/test_seven_operations.py'
+      - 'tests/test_seven_operations_schema.py'
       - '.github/workflows/seven-operation-probe.yml'
   workflow_dispatch:
 permissions:
@@ -24,4 +26,4 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - run: python3 -m unittest discover -s tests -p 'test_seven_operations.py' -v
+      - run: python3 -m unittest discover -s tests -p 'test_seven_operations*.py' -v
