@@ -13,6 +13,10 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: rightclick-bottle-publication
+  cancel-in-progress: false
+
 defaults:
   run:
     shell: bash -xeuo pipefail {0}
@@ -20,14 +24,15 @@ defaults:
 jobs:
   pr-pull:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     permissions:
       actions: read
       attestations: write
       checks: read
-      contents: write
+      contents: read
       id-token: write
       issues: read
-      pull-requests: write
+      pull-requests: read
     steps:
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@848c272c7bfe984a197bd4d16383f4c106ec61e6 # 2026.09.21.1
@@ -38,7 +43,7 @@ jobs:
         id: git_setup
         uses: Homebrew/actions/git-user-config@848c272c7bfe984a197bd4d16383f4c106ec61e6 # 2026.09.21.1
 
-      - name: Pull bottles
+      - name: Download reviewed bottles without publishing
         id: pull_bottles
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -47,15 +52,68 @@ jobs:
           HEAD_SHA: ${{ inputs.head_sha }}
           PULL_REQUEST: ${{ inputs.pull_request }}
         run: |
-          brew pr-pull --debug --retain-bottle-dir --tap="$GITHUB_REPOSITORY" --head-sha="$HEAD_SHA" \
+          test "$GITHUB_REPOSITORY" = rossbuckley1990-hash/homebrew-tap
+          [[ "$HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$PULL_REQUEST" =~ ^[1-9][0-9]*$ ]]
+          tap_path="$(brew --repository "$GITHUB_REPOSITORY")"
+          git -C "$tap_path" fetch origin refs/heads/main:refs/remotes/origin/main "$HEAD_SHA"
+          git -C "$tap_path" checkout -B main refs/remotes/origin/main
+          test "$(git -C "$tap_path" rev-parse HEAD)" = "$GITHUB_SHA"
+          git -C "$tap_path" merge-base --is-ancestor "$GITHUB_SHA" "$HEAD_SHA"
+          test "$(git -C "$tap_path" diff --name-only "$GITHUB_SHA" "$HEAD_SHA")" = Formula/rightclick.rb
+          echo "tap_path=$tap_path" >> "$GITHUB_OUTPUT"
+          brew pr-pull --debug --clean --no-upload --retain-bottle-dir --tap="$GITHUB_REPOSITORY" --head-sha="$HEAD_SHA" \
             "$PULL_REQUEST"
+
+      - name: Merge bottle pins locally and audit
+        env:
+          TAP_PATH: ${{ steps.pull_bottles.outputs.tap_path }}
+          BOTTLE_DIR: ${{ steps.pull_bottles.outputs.bottle_path }}
+          HEAD_SHA: ${{ inputs.head_sha }}
+          PULL_REQUEST: ${{ inputs.pull_request }}
+        run: |
+          root="$(python3 "$TAP_PATH/scripts/stage-bottle-release.py" root --formula "$TAP_PATH/Formula/rightclick.rb" \
+            --bottle-dir "$BOTTLE_DIR" --head-sha "$HEAD_SHA" --pull-request "$PULL_REQUEST")"
+          cd "$BOTTLE_DIR"
+          brew bottle --merge --write --no-commit --root-url="$root" *.bottle.json
+          brew audit --skip-style rossbuckley1990-hash/tap/rightclick
+          test -z "$(git -C "$TAP_PATH" diff --cached --name-only)"
+          test "$(git -C "$TAP_PATH" diff --name-only)" = Formula/rightclick.rb
+          git -C "$TAP_PATH" add -- Formula/rightclick.rb
+          test "$(git -C "$TAP_PATH" diff --cached --name-only)" = Formula/rightclick.rb
+          git -C "$TAP_PATH" commit -m "rightclick: record reviewed bottle metadata"
+          git -C "$TAP_PATH" diff --quiet
+          git -C "$TAP_PATH" diff --cached --quiet
+
+      - name: Prepare a closed immutable-publication handoff
+        env:
+          TAP_PATH: ${{ steps.pull_bottles.outputs.tap_path }}
+          BOTTLE_DIR: ${{ steps.pull_bottles.outputs.bottle_path }}
+          HEAD_SHA: ${{ inputs.head_sha }}
+          PULL_REQUEST: ${{ inputs.pull_request }}
+        run: |
+          python3 "$TAP_PATH/scripts/stage-bottle-release.py" handoff --formula "$TAP_PATH/Formula/rightclick.rb" \
+            --bottle-dir "$BOTTLE_DIR" --head-sha "$HEAD_SHA" --pull-request "$PULL_REQUEST" \
+            --tap-path "$TAP_PATH" --producer-base "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID" --run-attempt "$GITHUB_RUN_ATTEMPT"
 
       - name: Generate build provenance
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
-          subject-path: "${{ steps.pull_bottles.outputs.bottle_path }}/*.tar.gz"
+          subject-path: |
+            ${{ steps.pull_bottles.outputs.bottle_path }}/*.tar.gz
+            ${{ steps.pull_bottles.outputs.bottle_path }}/*.bottle.json
+            ${{ steps.pull_bottles.outputs.bottle_path }}/reviewed-formula.rb
+            ${{ steps.pull_bottles.outputs.bottle_path }}/reviewed-bottle.bundle
+            ${{ steps.pull_bottles.outputs.bottle_path }}/bottle-handoff.json
 
-      - name: Push commits
-        uses: Homebrew/actions/git-try-push@848c272c7bfe984a197bd4d16383f4c106ec61e6 # 2026.09.21.1
+      - name: Retain attested bottle publication handoff
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          branch: main
+          name: bottle-publication-${{ inputs.head_sha }}
+          if-no-files-found: error
+          path: |
+            ${{ steps.pull_bottles.outputs.bottle_path }}/*.tar.gz
+            ${{ steps.pull_bottles.outputs.bottle_path }}/*.bottle.json
+            ${{ steps.pull_bottles.outputs.bottle_path }}/reviewed-formula.rb
+            ${{ steps.pull_bottles.outputs.bottle_path }}/reviewed-bottle.bundle
+            ${{ steps.pull_bottles.outputs.bottle_path }}/bottle-handoff.json

@@ -116,6 +116,22 @@ The read-only check compares the stable upstream release, formula source/resourc
 
 Formula PRs use Apple Silicon `brew test-bot`. After the relevant exact head and distribution guard pass, use **brew pr-pull** with the reviewed PR number and head SHA. Independently verify the resulting formula, release, bottle bytes and installed behaviour. Avoid concurrent release jobs; re-read the current refs immediately before publication.
 
+The manual `brew pr-pull` workflow produces an attested handoff. It applies only the reviewed formula PR with `--clean --no-upload`, merges bottle pins locally with `brew bottle --merge --write --no-commit`, audits the formula and commits only its bottle metadata. CI attests the bottle bytes, JSON, formula, commit bundle and closed handoff manifest. It does not publish releases or push public formula pins, and requires no administration secret.
+
+After the producer succeeds, download its `bottle-publication-<reviewed-head>` artifact into an otherwise empty directory. Use a clean private clone of this tap and the existing authorized GitHub CLI account to finalize it:
+
+```bash
+python3 scripts/stage-bottle-release.py finalize \
+  --bottle-dir /absolute/path/to/downloaded-artifact \
+  --tap-path /absolute/path/to/private-tap-clone \
+  --head-sha <reviewed-formula-PR-head> --pull-request <formula-PR-number> \
+  --producer-base <producer-workflow-main-SHA> --run-id <producer-run-ID> --run-attempt 1
+```
+
+The finalizer requires a successful exact workflow run and cryptographically verified provenance for every retained payload, including the certificate's selected run/attempt, workflow, main ref and source commit. It verifies the bundle's source tree against the reviewed PR and its final formula-only commit. It then requires complete passing exact-head PR checks, accepted immutable upstream source and future tap-release immutability. The account needs the repository's administration-read permission for that immutability check; it is kept out of the CI token and no new secret is installed. Enable immutability only for future releases; existing tags and assets stay unchanged.
+
+Every new bottle is uploaded to a draft and independently downloaded and hashed before publication. The finalizer rechecks the draft, publishes and confirms the immutable release, verifies public bottle downloads and the tag target, then pushes the verified commits with an ordinary fast-forward. Tampering, failed checks, changed public `main` or mismatched asset identities stop publication; retries verify existing immutable bytes without replacing them. A published bottle still requires fresh installed-runtime acceptance.
+
 Then require:
 
 ```bash
