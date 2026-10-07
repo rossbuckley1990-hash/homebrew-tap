@@ -50,6 +50,14 @@ For an existing ChatGPT bridge, also inspect `rightclick setup chatgpt --dry-run
 
 A **bottle** is a separate precompiled Homebrew package. It is used only when a matching `bottle do` block and platform checksum have been published in the formula. A source tarball, green unit tests, or an older tap release does not establish that a current binary bottle exists. Check the formula and [tap releases](https://github.com/rossbuckley1990-hash/homebrew-tap/releases) rather than a duplicated version claim in this README.
 
+## Runtime portability and the stable package
+
+Homebrew is a distribution adapter for RIGHTCLICK, not a requirement of the capability runtime. The upstream portability work shares one engine and seven-operation MCP contract across macOS, Linux and Windows, with native discovery and integrations contributed by optional host adapters. See the [upstream portability support matrix and release gates](https://github.com/rossbuckley1990-hash/rightclick/blob/main/docs/PORTABILITY.md) when the portable implementation is merged.
+
+This tap still pins the existing immutable macOS release. Its Apple Silicon/macOS restriction and bundled Darwin tunnel-client match those published bytes. Removing those restrictions before updating the accepted source release would produce a broken Linux installation.
+
+Before distributing a portable release, require upstream macOS, Linux and Windows integrated build/test and real-provider MCP acceptance on the exact release source. Publish and independently verify a new immutable source asset before moving this formula's URL/checksum. Preserve the reviewed bottle workflow and run the distribution guard against the installed package. Add Linux eligibility only when that pinned source and its formula build pass on Linux; platform-specific tunnel resources must be conditional. Windows uses the same upstream runtime source and separate installation packaging, without depending on this tap.
+
 ## Maintainer alignment gates
 
 The source and resource pins come from upstream `packaging/tap/Formula/rightclick.rb` at the release tag. Preserve Homebrew style corrections and add bottle metadata only through the reviewed bottle workflow. Never force-move an upstream release tag or reuse old bottle checksums.
