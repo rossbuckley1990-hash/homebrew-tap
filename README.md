@@ -1,36 +1,75 @@
-# RIGHTCLICK Homebrew tap
+<div align="center">
 
-**The capability graph changes. The AI-facing interface does not.**
+# RIGHTCLICK · Homebrew
 
-RIGHTCLICK discovers supported capability contracts from local software and services, applies authority and safety checks, and invokes them through seven generic MCP operations. This tap distributes its published stable release; unreleased branches and untagged `main` changes are not shipped automatically.
+### Install the runtime. Let your AI discover the capabilities.
 
-## Install and connect
+The official Homebrew distribution path for [RIGHTCLICK](https://github.com/rossbuckley1990-hash/rightclick):<br>
+**one fixed MCP interface for supported local software, APIs and other runtimes.**
+
+[![Stable source](https://img.shields.io/github/v/release/rossbuckley1990-hash/rightclick?label=stable%20source&color=9b87f5)](https://github.com/rossbuckley1990-hash/rightclick/releases/latest)
+[![Distribution checks](https://github.com/rossbuckley1990-hash/homebrew-tap/actions/workflows/distribution-guard.yml/badge.svg)](https://github.com/rossbuckley1990-hash/homebrew-tap/actions/workflows/distribution-guard.yml)
+[![Homebrew tests](https://github.com/rossbuckley1990-hash/homebrew-tap/actions/workflows/tests.yml/badge.svg)](https://github.com/rossbuckley1990-hash/homebrew-tap/actions/workflows/tests.yml)
+
+[Install](#install) · [Connect your AI](#connect-your-ai) · [Upgrade](#upgrade-and-check) · [Capabilities](#what-you-are-installing) · [Release integrity](#source-releases-and-binary-bottles)
+
+<img src="docs/media/rightclick-hero-architecture.gif" alt="Supplied RIGHTCLICK 0.2.2 architecture illustration showing three service substrates behind one generic interface" width="960">
+
+<sub>Architecture illustration, not a raw execution transcript. [Explore the evidence](https://github.com/rossbuckley1990-hash/rightclick#see-the-evidence).</sub>
+
+</div>
+
+## Install
 
 ```bash
 brew install rossbuckley1990-hash/tap/rightclick
 rightclick version
-rightclick setup
+rightclick doctor
 ```
 
-Apple Silicon, macOS 14+. Source builds require Swift 6.2+ from the free Apple Command Line Tools. Update Command Line Tools through Software Update when needed. No paid Apple Developer account is required.
+**Apple Silicon, macOS 14+ target.** A source build requires **Swift 6.2+** from the free Apple Command Line Tools. Update the tools through Software Update when needed. No paid Apple Developer account is required.
 
-For detected supported local clients, preview before applying:
+A matching precompiled bottle is used only when its platform and checksum are published in [Formula/rightclick.rb](Formula/rightclick.rb). Otherwise Homebrew builds the pinned source with locked dependency revisions inside its build sandbox. Do not mistake the existence of a source tarball for a ready-to-pour binary bottle.
+
+## Connect your AI
+
+Preview the detected supported local clients, then apply:
 
 ```bash
 rightclick setup --all --dry-run --json
 rightclick setup --all --yes
 ```
 
-An individual client can be selected with `--client cursor`, `--client claude` (Claude Code), or `--client codex`. For any other compatible MCP client, launch `rightclick mcp` over stdio. See the [upstream client setup guide](https://github.com/rossbuckley1990-hash/rightclick#give-the-same-capability-runtime-to-your-ai).
+Select a single client with `--client cursor`, `--client claude` (Claude Code), or `--client codex`. For another compatible MCP client, configure the installed `rightclick` executable with the argument `mcp` for stdio transport. [Generic client configuration and agent guide](https://github.com/rossbuckley1990-hash/rightclick#for-agents-and-mcp-builders).
 
-For the persistent ChatGPT bridge:
+The persistent ChatGPT bridge has a separate preview and setup path:
 
 ```bash
 rightclick setup chatgpt --dry-run --json
 rightclick setup chatgpt --yes
 ```
 
-The formula includes RIGHTCLICK's pinned tunnel-client compatibility resource and its required licence/notice files. Ordinary local MCP use does not require pairing the ChatGPT bridge.
+The formula includes RIGHTCLICK's pinned tunnel-client compatibility resource and its required licence, notice and dependency materials. Ordinary local MCP use does not require pairing the ChatGPT bridge.
+
+**First prompt:**
+
+```text
+Use RIGHTCLICK to inspect this item and discover what my software can do with it.
+Explain the applicable capabilities and their current schemas before acting.
+Ask before modifying files or sending data. Verify the result after any approved action.
+```
+
+## What you are installing
+
+The stable **0.2.2** capability families include macOS Services, sharing, supported OpenAPI, GraphQL and gRPC reflection, capability-artifact resolution, ARD acquisition and configured MCP federation. Origin-bound authority and explicit verification keep discovery, permission, provider acceptance and observable success separate.
+
+The AI sees the same seven operations: `context_runtime`, `context_inspect`, `context_providers`, `context_actions`, `context_explain`, `context_run` and `context_run_status`.
+
+**Important limits:** Finder Action extensions are discovery-only. Schemas and gRPC operations have supported subsets. OAuth/OIDC foundations are not universal automatic login. The full stable runtime targets macOS; Linux ARD component evidence is not a Windows/Linux full-runtime release. Untagged `main`, feature branches and roadmap items are not installed automatically.
+
+The source repository contains reproducible evidence of [BBEdit adding five capabilities without provider-specific code](https://github.com/rossbuckley1990-hash/rightclick/blob/main/docs/BBEDIT-PROOF.md), [multi-application image processing](https://github.com/rossbuckley1990-hash/rightclick/blob/main/evidence/v0.1-scalability-blind/composition-png-jpeg-optim/REPORT.md), [CSV-to-chart composition](https://github.com/rossbuckley1990-hash/rightclick/blob/main/evidence/v0.1-scalability-blind/cross-domain-csv-chart/REPORT.md) and [reflected GitHub self-hosting](https://github.com/rossbuckley1990-hash/rightclick/blob/main/evidence/self-hosting-2026-10-07/README.md). Each experiment states its original date and version; they are not all claimed as freshly repeated on 0.2.2.
+
+[Full capability matrix](https://github.com/rossbuckley1990-hash/rightclick#what-it-can-do) · [Security boundaries](https://github.com/rossbuckley1990-hash/rightclick/blob/main/SECURITY.md)
 
 ## Upgrade and check
 
@@ -42,26 +81,28 @@ rightclick doctor
 brew test rossbuckley1990-hash/tap/rightclick
 ```
 
-For an existing ChatGPT bridge, also inspect `rightclick setup chatgpt --dry-run --json` and confirm the connected `context_runtime` reports the upgraded executable. A changed package or setup file alone does not prove a live connection. Do not delete pairing state merely to upgrade.
+For an existing ChatGPT bridge, also inspect `rightclick setup chatgpt --dry-run --json` and confirm that the connected `context_runtime` reports the upgraded executable and hash. A changed package or setup file alone does not establish that the live connection uses it. Do not delete pairing state merely to upgrade.
 
-## Source release versus binary bottle
+## Source releases and binary bottles
 
-[Formula/rightclick.rb](Formula/rightclick.rb) is the installation pin. It names a versioned [upstream source release](https://github.com/rossbuckley1990-hash/rightclick/releases/latest) and its SHA256. Homebrew resolves the locked Swift dependency revisions and compiles that source inside its build sandbox when no matching bottle is configured.
+[Formula/rightclick.rb](Formula/rightclick.rb) is the installation pin. It references a versioned [upstream source release](https://github.com/rossbuckley1990-hash/rightclick/releases/latest), exact source SHA256 and pinned compatibility resources.
 
-A **bottle** is a separate precompiled Homebrew package. It is used only when a matching `bottle do` block and platform checksum have been published in the formula. A source tarball, green unit tests, or an older tap release does not establish that a current binary bottle exists. Check the formula and [tap releases](https://github.com/rossbuckley1990-hash/homebrew-tap/releases) rather than a duplicated version claim in this README.
+A **bottle** is a separate precompiled Homebrew package. A complete binary publication requires a matching `bottle do` block, platform checksum and downloadable asset in [tap releases](https://github.com/rossbuckley1990-hash/homebrew-tap/releases). An older tap release, a merged formula PR or successful source tests is not evidence that the current binary bottle exists.
 
-## Maintainer alignment gates
+Use these live sources instead of relying on duplicated “latest” version labels. The distribution guard keeps source alignment and actual binary availability separate and reports missing bottles rather than making them appear green.
 
-The source and resource pins come from upstream `packaging/tap/Formula/rightclick.rb` at the release tag. Preserve Homebrew style corrections and add bottle metadata only through the reviewed bottle workflow. Never force-move an upstream release tag or reuse old bottle checksums.
+## Maintainer release gates
+
+Source and resource pins come from upstream `packaging/tap/Formula/rightclick.rb` at the release tag. Preserve Homebrew style corrections and required third-party notices. Never force-move a release tag or reuse old bottle checksums.
 
 ```bash
 python3 -m unittest discover -s tests -v
 python3 scripts/check-distribution.py
 ```
 
-The read-only check compares the latest stable upstream release, formula source pin and upstream generated resource pins, downloads and hashes the source asset, and verifies `SHA256SUMS-source`. It does not install software or modify either repository.
+The read-only check compares the stable upstream release, formula source/resource pins and published checksum file, and independently downloads and hashes the source bytes. It does not install software or modify either repository.
 
-Formula pull requests use the existing Apple Silicon `brew test-bot` build/test path. After its latest exact head and the distribution guard are green, use the existing **brew pr-pull** workflow with that pull request number and reviewed head SHA to publish its bottle and formula metadata. Do not merge a formula-only change and assume a bottle was published.
+Formula PRs use Apple Silicon `brew test-bot`. After the relevant exact head and distribution guard pass, use **brew pr-pull** with the reviewed PR number and head SHA. Independently verify the resulting formula, release, bottle bytes and installed behaviour. Avoid concurrent release jobs; re-read the current refs immediately before publication.
 
 Then require:
 
@@ -69,6 +110,22 @@ Then require:
 python3 scripts/check-distribution.py --require-bottle
 ```
 
-This additionally checks the matching tap release, bottle root URL, Apple Silicon platform pins and downloaded bottle checksums. Scheduled, release and manual guard runs require this full check; a missing current bottle remains a visible failure, not a false green. Publication itself remains an explicit reviewed action.
+This additionally validates the matching binary release, bottle root URL, Apple Silicon platform pins and downloaded checksums. Scheduled, release and manual guard runs require this check. A missing current bottle remains a visible failure, not a substitute source-only pass.
 
-`brew uninstall rightclick` removes the package. Client registrations, pairing state and user logs are separate; remove only RIGHTCLICK-owned entries when intentionally disconnecting. See the [main repository](https://github.com/rossbuckley1990-hash/rightclick) for capability limits and security guidance. Provider acceptance is not independently verified success.
+## Uninstall
+
+```bash
+brew uninstall rightclick
+```
+
+Client registrations, pairing state and user logs are separate from the package. Remove only RIGHTCLICK-owned entries when intentionally disconnecting; uninstalling a formula is not permission to delete unrelated client configuration.
+
+---
+
+<div align="center">
+
+**The capability graph changes. The AI-facing interface does not.**
+
+[RIGHTCLICK source](https://github.com/rossbuckley1990-hash/rightclick) · [Report an installation issue](https://github.com/rossbuckley1990-hash/homebrew-tap/issues) · [Source release procedure](https://github.com/rossbuckley1990-hash/rightclick/blob/main/docs/RELEASE.md)
+
+</div>
