@@ -1,0 +1,155 @@
+name: RIGHTCLICK distribution guard
+
+on:
+  pull_request:
+    paths:
+      - Formula/rightclick.rb
+      - .github/workflows/distribution-guard.yml
+  push:
+    branches:
+      - main
+    paths:
+      - Formula/rightclick.rb
+      - .github/workflows/distribution-guard.yml
+  release:
+    types:
+      - published
+  workflow_dispatch:
+  schedule:
+    - cron: "23 */6 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  distribution-invariants:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Verify RIGHTCLICK source, formula and bottle release alignment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import sys
+          import urllib.request
+          from pathlib import Path
+
+          OWNER = "rossbuckley1990-hash"
+          UPSTREAM = "rightclick"
+          TAP = "homebrew-tap"
+
+          formula = Path("Formula/rightclick.rb").read_text()
+
+          source = re.search(
+              r"releases/download/v(\d+\.\d+\.\d+)/rightclick-(\d+\.\d+\.\d+)-source\.tar\.gz",
+              formula,
+          )
+          if not source:
+              raise SystemExit("Formula source URL is not a versioned RIGHTCLICK release asset.")
+
+          tag_version, asset_version = source.groups()
+          if tag_version != asset_version:
+              raise SystemExit(
+                  f"Formula source URL versions diverge: tag={tag_version} asset={asset_version}"
+              )
+
+          sha = re.search(r'^\s*sha256 "([0-9a-f]{64})"\s*$', formula, re.MULTILINE)
+          if not sha:
+              raise SystemExit("Formula source SHA-256 was not found.")
+          formula_sha = sha.group(1)
+
+          token = os.environ.get("GH_TOKEN", "")
+          headers = {
+              "Accept": "application/vnd.github+json",
+              "User-Agent": "rightclick-distribution-guard",
+          }
+          if token:
+              headers["Authorization"] = f"Bearer {token}"
+
+          def api(path):
+              request = urllib.request.Request(
+                  f"https://api.github.com{path}",
+                  headers=headers,
+              )
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  return json.load(response)
+
+          upstream = api(f"/repos/{OWNER}/{UPSTREAM}/releases/latest")
+          upstream_tag = upstream["tag_name"]
+          upstream_version = upstream_tag.removeprefix("v")
+
+          if upstream_version != tag_version:
+              raise SystemExit(
+                  f"Distribution drift: upstream={upstream_tag} formula=v{tag_version}"
+              )
+
+          source_name = f"rightclick-{tag_version}-source.tar.gz"
+          source_assets = [
+              asset for asset in upstream.get("assets", [])
+              if asset.get("name") == source_name
+          ]
+          if len(source_assets) != 1:
+              raise SystemExit(
+                  f"Expected exactly one upstream asset named {source_name}; found {len(source_assets)}"
+              )
+
+          digest = source_assets[0].get("digest")
+          if digest and digest != f"sha256:{formula_sha}":
+              raise SystemExit(
+                  f"Formula SHA does not match upstream release digest: formula={formula_sha} release={digest}"
+              )
+
+          full_check = os.environ.get("EVENT_NAME") in {
+              "release",
+              "schedule",
+              "workflow_dispatch",
+          }
+
+          if full_check:
+              tap_release = api(f"/repos/{OWNER}/{TAP}/releases/latest")
+              expected_tag = f"rightclick-{tag_version}"
+              actual_tag = tap_release["tag_name"]
+              if actual_tag != expected_tag:
+                  raise SystemExit(
+                      f"Tap release drift: expected={expected_tag} actual={actual_tag}"
+                  )
+
+              bottle_names = [
+                  asset.get("name", "")
+                  for asset in tap_release.get("assets", [])
+              ]
+              expected_prefix = f"rightclick-{tag_version}."
+              bottles = [
+                  name for name in bottle_names
+                  if name.startswith(expected_prefix)
+                  and ".bottle" in name
+                  and name.endswith(".tar.gz")
+              ]
+              if not bottles:
+                  raise SystemExit(
+                      f"Tap release {expected_tag} has no matching RIGHTCLICK bottle asset."
+                  )
+
+              if "bottle do" not in formula:
+                  raise SystemExit(
+                      "Tap release exists but Formula/rightclick.rb has no bottle block."
+                  )
+
+          print(
+              json.dumps(
+                  {
+                      "upstream": upstream_tag,
+                      "formula": f"v{tag_version}",
+                      "source_sha256": formula_sha,
+                      "full_check": full_check,
+                  },
+                  sort_keys=True,
+              )
+          )
+          PY
