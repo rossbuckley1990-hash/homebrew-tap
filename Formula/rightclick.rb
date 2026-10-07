@@ -5,6 +5,8 @@ class Rightclick < Formula
   sha256 "a3953eb8f1be2f9123d694b90202244c94ee21971171972f8ce1d3bacf807ca5"
   license "Apache-2.0"
 
+  # Publish this release through the reviewed-head bottle workflow before merging.
+
   depends_on arch: :arm64
   depends_on macos: :sonoma
   uses_from_macos "swift" => :build, since: :sonoma
