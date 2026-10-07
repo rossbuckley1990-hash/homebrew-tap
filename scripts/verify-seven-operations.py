@@ -81,6 +81,19 @@ def _tools(result: dict[str, Any]) -> list[str]:
     return sorted(names)
 
 
+def _schema_digest(result: dict[str, Any]) -> str:
+    # Validate names before indexing. Canonical JSON ignores object/listing
+    # ordering but retains every schema/description field and array value.
+    _tools(result)
+    declarations = sorted(result["tools"], key=lambda tool: tool["name"])
+    try:
+        canonical = json.dumps(declarations, sort_keys=True, separators=(",", ":"),
+                               ensure_ascii=False, allow_nan=False).encode("utf-8")
+    except (UnicodeError, ValueError, RecursionError) as exc:
+        raise AcceptanceError("Malformed operation declaration") from exc
+    return hashlib.sha256(canonical).hexdigest()
+
+
 def verify(binary: Path, expected_version: str, timeout: float = 30.0) -> dict[str, Any]:
     if not math.isfinite(timeout) or not 0 < timeout <= 120:
         raise AcceptanceError("Timeout must be positive and at most 120 seconds")
@@ -160,7 +173,9 @@ def verify(binary: Path, expected_version: str, timeout: float = 30.0) -> dict[s
         if not isinstance(init.get("protocolVersion"), str) or not init["protocolVersion"]:
             raise AcceptanceError("Missing negotiated protocol version")
         send({"jsonrpc": "2.0", "method": "notifications/initialized"})
-        names = _tools(request(2, "tools/list", {}))
+        first_listing = request(2, "tools/list", {})
+        names = _tools(first_listing)
+        schema_digest = _schema_digest(first_listing)
         runtime = _tool_result(request(3, "tools/call", {"name": "context_runtime", "arguments": {}}))
         if runtime.get("product") != "RIGHTCLICK" or runtime.get("version") != expected_version:
             raise AcceptanceError("Runtime product/version mismatch")
@@ -175,13 +190,14 @@ def verify(binary: Path, expected_version: str, timeout: float = 30.0) -> dict[s
         if (inspected.get("kind"), inspected.get("text"), inspected.get("typeIdentifier"), inspected.get("byteCount")) != (
                 "text", SENTINEL, "public.plain-text", len(SENTINEL.encode())):
             raise AcceptanceError("Read-only inspection mismatch")
-        if names != _tools(request(5, "tools/list", {})):
+        final_listing = request(5, "tools/list", {})
+        if names != _tools(final_listing) or schema_digest != _schema_digest(final_listing):
             raise AcceptanceError("Top-level operation surface changed")
         if _digest(executable) != before_hash:
             raise AcceptanceError("Executable changed during acceptance")
         return {"status": "PASS", "scope": "installed stdio process; runtime identity and read-only inspection",
                 "version": expected_version, "binarySHA256": before_hash, "toolCount": 7,
-                "operations": names, "providerActionsInvoked": 0,
+                "operations": names, "toolSchemaSHA256": schema_digest, "providerActionsInvoked": 0,
                 "elevenSubstrateProof": "NOT_RUN", "modernDiscoveryProtocol": "NOT_TESTED"}
     finally:
         stopping.set()

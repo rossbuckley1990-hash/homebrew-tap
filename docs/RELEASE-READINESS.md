@@ -1,6 +1,6 @@
 # RCIR companion release readiness — 2026-10-07
 
-The probe implementation and 34 local tests pass. The existing installed 0.2.2 process passes identity, exact-seven-tools and read-only inspection. Remote candidate CI/review and merge are pending. Candidate package publication, fresh installation and reconnected-client RCIR execution are NOT_RUN.
+The probe implementation and 38 local tests pass. The existing installed 0.2.2 process passes identity, exact-seven-tools and read-only inspection. Initial exact-head CI passed. Schema review added four controls; updated-head CI and merge are pending. Candidate package publication, fresh installation and reconnected-client RCIR execution are NOT_RUN.
 
 This candidate does not modify the formula, release assets, version, source checksum, bottle checksum, platform support or tunnel resource. It preserves concurrent main's 0.2.2 bottle block. The source archive and binary bottle have different bytes and hashes; neither the formula text nor a version match proves those bytes were downloaded or used by a client.
 

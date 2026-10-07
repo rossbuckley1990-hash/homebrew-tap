@@ -1,0 +1,35 @@
+test_listing_order_does_not_change_fingerprint (test_seven_operations_schema.SevenOperationSchemaTests.test_listing_order_does_not_change_fingerprint) ... ERROR
+test_same_names_changed_schema_is_rejected (test_seven_operations_schema.SevenOperationSchemaTests.test_same_names_changed_schema_is_rejected) ... FAIL
+test_stable_schema_records_fingerprint (test_seven_operations_schema.SevenOperationSchemaTests.test_stable_schema_records_fingerprint) ... ERROR
+
+======================================================================
+ERROR: test_listing_order_does_not_change_fingerprint (test_seven_operations_schema.SevenOperationSchemaTests.test_listing_order_does_not_change_fingerprint)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap/tests/test_seven_operations_schema.py", line 31, in test_listing_order_does_not_change_fingerprint
+    self.assertEqual(self.run_probe("pass")["toolSchemaSHA256"],
+                     ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+KeyError: 'toolSchemaSHA256'
+
+======================================================================
+ERROR: test_stable_schema_records_fingerprint (test_seven_operations_schema.SevenOperationSchemaTests.test_stable_schema_records_fingerprint)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap/tests/test_seven_operations_schema.py", line 28, in test_stable_schema_records_fingerprint
+    self.assertRegex(result["toolSchemaSHA256"], r"^[0-9a-f]{64}$")
+                     ~~~~~~^^^^^^^^^^^^^^^^^^^^
+KeyError: 'toolSchemaSHA256'
+
+======================================================================
+FAIL: test_same_names_changed_schema_is_rejected (test_seven_operations_schema.SevenOperationSchemaTests.test_same_names_changed_schema_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ross/.codex/.chatgpt-projects/g-p-6ac33d82393c8191a661a30d2e144882/work/homebrew-tap/tests/test_seven_operations_schema.py", line 23, in test_same_names_changed_schema_is_rejected
+    with self.assertRaises(probe.AcceptanceError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AcceptanceError not raised
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.591s
+
+FAILED (failures=1, errors=2)

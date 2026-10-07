@@ -1,0 +1,20 @@
+{
+  "binarySHA256": "d31419fafc96e08c4a2db9d1b389320acb2835c1a901597244249772d7ac489d",
+  "elevenSubstrateProof": "NOT_RUN",
+  "modernDiscoveryProtocol": "NOT_TESTED",
+  "operations": [
+    "context_actions",
+    "context_explain",
+    "context_inspect",
+    "context_providers",
+    "context_run",
+    "context_run_status",
+    "context_runtime"
+  ],
+  "providerActionsInvoked": 0,
+  "scope": "installed stdio process; runtime identity and read-only inspection",
+  "status": "PASS",
+  "toolCount": 7,
+  "toolSchemaSHA256": "e0d4e1acdd4620c308b329be2105c64892f9d0aa118420dbc58bef3e7913944a",
+  "version": "0.2.2"
+}
