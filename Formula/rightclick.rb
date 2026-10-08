@@ -1,21 +1,9 @@
 class Rightclick < Formula
   desc "Install an app. Your AI learns what it can do"
   homepage "https://github.com/rossbuckley1990-hash/rightclick"
-  url "https://github.com/rossbuckley1990-hash/rightclick/releases/download/v0.2.2/rightclick-0.2.2-source.tar.gz"
-  sha256 "a3953eb8f1be2f9123d694b90202244c94ee21971171972f8ce1d3bacf807ca5"
+  url "https://github.com/rossbuckley1990-hash/rightclick/releases/download/v0.2.3/rightclick-0.2.3-source.tar.gz"
+  sha256 "219fec02cd7ec6e7b8056514853e7dbd8aa531bfc25d5b1ecffa4e1cb81478dc"
   license "Apache-2.0"
-
-  bottle do
-    root_url "https://github.com/rossbuckley1990-hash/homebrew-tap/releases/download/rightclick-0.2.2"
-    rebuild 1
-    sha256 arm64_tahoe: "147828d2ad81b0238c4d733ad757c5c584b7fe359a58db34552052641ea762fd"
-  end
-
-  # Publish this release through the reviewed-head bottle workflow before merging.
-
-  depends_on arch: :arm64
-  depends_on macos: :sonoma
-  uses_from_macos "swift" => :build, since: :sonoma
 
   # RIGHTCLICK owns this compatibility pin.
   # ChatGPT's modern tunnel path requires OpenAI tunnel-client >= 0.0.15.
@@ -23,6 +11,10 @@ class Rightclick < Formula
     url "https://github.com/openai/tunnel-client/releases/download/v0.0.15/tunnel-client-v0.0.15-darwin-arm64.zip"
     sha256 "b2cae3aa9df45b4c2fe9b1d700ebacce39f9feb6a6b46b86e6499f9a51bf72ff"
   end
+
+  depends_on arch: :arm64
+  depends_on macos: :sonoma
+  uses_from_macos "swift" => :build, since: :sonoma
 
   def select_free_command_line_tools
     developer = Pathname("/Library/Developer/CommandLineTools")
@@ -63,7 +55,7 @@ class Rightclick < Formula
       libexec.install(
         "tunnel-client",
         "cloudflared",
-        "cloudflared-manifest.json",
+        "cloudflared-manifest.json"
       )
 
       tunnel_share = pkgshare/"OpenAITunnelClient"
@@ -72,7 +64,7 @@ class Rightclick < Formula
         "LICENSE",
         "NOTICE",
         "tunnel-client-v0.0.15-darwin-arm64-licenses.txt",
-        "tunnel-client-v0.0.15-darwin-arm64.spdx.json",
+        "tunnel-client-v0.0.15-darwin-arm64.spdx.json"
       )
     end
   end
@@ -89,7 +81,7 @@ class Rightclick < Formula
 
     assert_match(
       "0.0.15",
-      shell_output("#{libexec}/tunnel-client --version"),
+      shell_output("#{libexec}/tunnel-client --version")
     )
   end
 end
